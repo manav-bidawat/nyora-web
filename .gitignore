@@ -1,0 +1,10 @@
+node_modules/
+.netlify/
+.env
+.env.*
+dist/
+build/
+*.log
+.DS_Store
+.idea/
+*.iml
