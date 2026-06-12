@@ -1,0 +1,13 @@
+{
+  "name": "nyora-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nyora Web — production build (bundles web/ into dist/ for Cloudflare Pages).",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
