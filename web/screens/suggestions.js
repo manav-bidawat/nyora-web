@@ -24,9 +24,9 @@ import {
 import { router } from '../core/store.js';
 
 export const meta = {
-  title: 'Feed',
+  title: 'Discover',
   nav: true,
-  icon: 'sparkles',
+  icon: 'trending',
   order: 5,
 };
 
@@ -139,7 +139,7 @@ function trendingCard(item) {
 
   // Score / genre micro-tags over the cover, echoing the desktop caption row.
   const tags = [];
-  if (score != null) tags.push(chip(`★ ${score}%`, { class: 'status-completed' }));
+  if (score != null) tags.push(chip(`${score}%`, { class: 'status-completed' }));
   if (genre) tags.push(chip(genre));
   if (!tags.length) tags.push(chip('Trending'));
   coverWrap.appendChild(

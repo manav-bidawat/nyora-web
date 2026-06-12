@@ -348,7 +348,7 @@ function mediaCard(media) {
       el('span', {
         class: 'badge',
         style: { left: 'auto', right: '8px', display: 'inline-flex', alignItems: 'center', gap: '3px' },
-      }, `★ ${(score / 10).toFixed(1)}`),
+      }, `${(score / 10).toFixed(1)}`),
     );
   }
 

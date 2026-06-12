@@ -39,7 +39,7 @@ import {
 import { store, router } from '../core/store.js';
 import library from '../core/library.js';
 
-export const meta = { title: 'Reader', nav: false, icon: 'sparkles', order: 99 };
+export const meta = { title: 'Reader', nav: false, icon: 'library', order: 99 };
 
 // Turn an internal error into something a reader should see — never the raw
 // "Unsupported source: ASURASCANS_US" / MangaSourceRef developer jargon.

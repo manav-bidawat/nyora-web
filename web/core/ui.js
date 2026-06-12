@@ -153,14 +153,12 @@ const ICON_PATHS = {
   folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   stats: '<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>',
-  sparkles: '<path d="M12 2l2.4 6.6a3 3 0 0 0 1 1L22 12l-6.6 2.4a3 3 0 0 0-1 1L12 22l-2.4-6.6a3 3 0 0 0-1-1L2 12l6.6-2.4a3 3 0 0 0 1-1z"/>',
   download: '<path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.9H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-2.9l-.1-.1A2 2 0 1 1 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   anilist: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 16V9l-2 7M8 9h3"/><path d="M14 16l2.5-7L19 16"/>',
   back: '<path d="M15 19l-7-7 7-7"/>',
   menu: '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
-  star: '<path d="M12 3.5l2.6 5.6 6.1.6-4.6 4.1 1.4 6-5.5-3.2-5.5 3.2 1.4-6L3.3 9.7l6.1-.6z"/>',
   heart: '<path d="M12 20s-7-4.5-9.3-9A5 5 0 0 1 12 6a5 5 0 0 1 9.3 5C19 15.5 12 20 12 20z"/>',
   close: '<path d="M6 6l12 12"/><path d="M18 6 6 18"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>',
@@ -200,7 +198,7 @@ const ICON_PATHS = {
 };
 
 export function icon(name) {
-  const paths = ICON_PATHS[name] || ICON_PATHS.sparkles;
+  const paths = ICON_PATHS[name] || ICON_PATHS.info;
   const span = el('span', { class: 'icon', 'data-icon': name });
   span.innerHTML =
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ` +

@@ -74,7 +74,7 @@ const NAV_GROUPS = [
   ] },
   { label: 'Discover', items: [
     { key: 'explore', label: 'Explore', icon: 'compass' },
-    { key: 'suggestions', label: 'Feed', icon: 'sparkles' },
+    { key: 'suggestions', label: 'Discover', icon: 'trending' },
     { key: 'updates', label: 'Updates', icon: 'bell' },
     { key: 'browser', label: 'Browser', icon: 'globe' },
   ] },

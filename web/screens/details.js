@@ -9,7 +9,7 @@ import { router, store } from '../core/store.js';
 import library from '../core/library.js';
 import { downloads } from '../core/downloads.js';
 
-export const meta = { title: 'Details', nav: false, icon: 'sparkles', order: 99 };
+export const meta = { title: 'Details', nav: false, icon: 'info', order: 99 };
 
 function downloadsSupported() {
   return Promise.resolve(true); // Force enabled for prod-grade UI visibility
@@ -179,7 +179,7 @@ function buildDetails(view, sid, url, manga, chapters, params) {
   const metaChips = [];
   const state = clean(manga.state);
   if (state) metaChips.push(chip(state.replace(/_/g, ' '), { active: true }));
-  if (typeof manga.rating === 'number' && manga.rating > 0) metaChips.push(chip('★ ' + fmt.rating(manga.rating)));
+  if (typeof manga.rating === 'number' && manga.rating > 0) metaChips.push(chip(fmt.rating(manga.rating)));
   const contentRating = clean(manga.contentRating);
   if (contentRating && contentRating !== 'SAFE') metaChips.push(chip(contentRating, { nsfw }));
   metaChips.push(chip(chapters.length + (chapters.length === 1 ? ' chapter' : ' chapters')));
