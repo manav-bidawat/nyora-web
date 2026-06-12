@@ -1,0 +1,40 @@
+name: Deploy web → Cloudflare Pages
+
+# Auto-deploys the static web/ SPA to nyoraweb.pages.dev on every push to main,
+# plus a manual "Run workflow" button. Needs two repo secrets:
+#   CLOUDFLARE_API_TOKEN  — token with Account › Cloudflare Pages › Edit
+#   CLOUDFLARE_ACCOUNT_ID — your Cloudflare account id
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-deploy-nyoraweb
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # First run creates the Pages project; later runs ignore "already exists".
+      - name: Ensure Pages project exists
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create nyoraweb --production-branch=main
+
+      - name: Deploy web/ to nyoraweb.pages.dev
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy web --project-name=nyoraweb --branch=main
