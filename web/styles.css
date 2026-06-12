@@ -1386,7 +1386,7 @@ body.reader-active .view {
 
 /* ---- atmosphere ------------------------------------------------------- */
 .wlc-sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
-.wlc-glow { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; }
+.wlc-glow { position: absolute; border-radius: 50%; filter: blur(58px); will-change: transform; }
 .wlc-glow-1 {
   width: 56vmax; height: 56vmax; left: -18vmax; top: -22vmax;
   background: radial-gradient(circle, color-mix(in srgb, var(--accent) 55%, transparent), transparent 70%);
@@ -1518,11 +1518,12 @@ body.reader-active .view {
 /* ---- right: auth panel ------------------------------------------------ */
 .wlc-auth {
   width: 100%; min-width: 0;
-  background: linear-gradient(180deg, rgba(20,28,48,0.66), rgba(12,18,34,0.5));
+  /* Opaque card — no backdrop-filter. The frosted-glass blur re-sampled the
+     animated rain behind it every frame, which made scrolling lag on desktop. */
+  background: linear-gradient(180deg, rgba(22, 30, 52, 0.93), rgba(12, 18, 34, 0.9));
   border: 1px solid rgba(170,195,255,0.13);
   border-radius: 20px;
   padding: 26px;
-  backdrop-filter: blur(22px) saturate(140%);
   box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
   animation: wlc-rise 0.8s ease 0.32s both;
 }
@@ -1591,10 +1592,8 @@ body.reader-active .view {
 @media (max-width: 900px) {
   .wlc-inner { grid-template-columns: minmax(0, 1fr); max-width: 460px; gap: 34px; }
   .wlc-hero { text-align: left; }
-  /* Drop the per-frame killers on phones: the auth card no longer re-blurs the
-     animated rain behind it, and the big glows/mist/flash stop animating. */
-  .wlc-auth { animation-delay: 0.42s; backdrop-filter: none; background: rgba(14, 20, 36, 0.94); }
-  .wlc-glow { filter: blur(55px); }
+  .wlc-auth { animation-delay: 0.42s; }
+  /* Phones: also stop the big background animations entirely. */
   .wlc-glow-1, .wlc-glow-2, .wlc-mist { animation: none; }
   .wlc-flash { display: none; }
 }
