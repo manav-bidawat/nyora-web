@@ -1364,22 +1364,28 @@ body.reader-active .view {
   inset: 0;
   z-index: 1000;
   display: grid;
-  place-items: center;
+  place-items: safe center;
   grid-template-columns: minmax(0, 1fr);
   padding: clamp(22px, 4vw, 60px);
-  overflow: hidden;
+  /* Scroll the card when it's taller than the screen instead of clipping it, and
+     keep the scroll contained so the page behind never moves (mobile fix). */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   color: #eef1fb;
   background:
     radial-gradient(150% 120% at 12% -10%, #1b2745 0%, #0c1426 44%, #05070f 100%);
   isolation: isolate;
-  animation: wlc-in 0.6s ease both;
 }
+/* While the welcome is up, lock the page behind it — no main-content flash, no
+   scroll-through. Class is added/removed by screens/welcome.js. */
+.wlc-open, .wlc-open body { overflow: hidden; }
 .wlc.is-leaving { animation: wlc-out 0.38s ease forwards; }
 @keyframes wlc-in  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes wlc-out { to { opacity: 0; transform: scale(1.015); } }
 
 /* ---- atmosphere ------------------------------------------------------- */
-.wlc-sky { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.wlc-sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
 .wlc-glow { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; }
 .wlc-glow-1 {
   width: 56vmax; height: 56vmax; left: -18vmax; top: -22vmax;

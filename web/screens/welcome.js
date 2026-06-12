@@ -58,6 +58,7 @@ function rainLayer(count, cls) {
 export function showWelcome(onDone) {
   const finish = () => {
     overlay.classList.add('is-leaving');
+    document.documentElement.classList.remove('wlc-open');
     setTimeout(() => { overlay.remove(); if (onDone) onDone(); }, 380);
   };
 
@@ -180,6 +181,7 @@ export function showWelcome(onDone) {
     stage,
   );
 
+  document.documentElement.classList.add('wlc-open');
   document.body.appendChild(overlay);
 }
 

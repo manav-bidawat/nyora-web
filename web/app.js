@@ -254,11 +254,13 @@ buildTabbar();
 wireTopbar();
 registerSW();
 router.onChange(dispatch);
-router.start(routes, 'suggestions');
 
 // First-run welcome / start screen (sign in with Google, continue as guest,
-// restore from backup). Overlays the app shell on desktop and mobile until the
-// user proceeds.
+// restore from backup). Show it BEFORE any main content renders so the app shell
+// never flashes behind it; only start routing — which renders the first screen
+// into #view — once the user proceeds.
 if (shouldShowWelcome()) {
-  showWelcome();
+  showWelcome(() => router.start(routes, 'suggestions'));
+} else {
+  router.start(routes, 'suggestions');
 }
