@@ -1591,7 +1591,12 @@ body.reader-active .view {
 @media (max-width: 900px) {
   .wlc-inner { grid-template-columns: minmax(0, 1fr); max-width: 460px; gap: 34px; }
   .wlc-hero { text-align: left; }
-  .wlc-auth { animation-delay: 0.42s; }
+  /* Drop the per-frame killers on phones: the auth card no longer re-blurs the
+     animated rain behind it, and the big glows/mist/flash stop animating. */
+  .wlc-auth { animation-delay: 0.42s; backdrop-filter: none; background: rgba(14, 20, 36, 0.94); }
+  .wlc-glow { filter: blur(55px); }
+  .wlc-glow-1, .wlc-glow-2, .wlc-mist { animation: none; }
+  .wlc-flash { display: none; }
 }
 @media (max-width: 460px) {
   .wlc-title { font-size: clamp(38px, 12vw, 52px); }

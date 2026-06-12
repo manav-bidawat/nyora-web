@@ -1,9 +1,14 @@
 
-import {
-  getParser as bundledGetParser,
-  getAllSources as bundledGetAllSources,
-  SortOrder,
-} from './web-parsers/index.js';
+// SortOrder is a tiny enum from base.js (no parser graph) — keep it static.
+// The bundled fallback parsers (~244 KB) load lazily via bundledParsers(), only
+// when the OTA runtime fails, so they stay out of the initial page bundle.
+import { SortOrder } from './web-parsers/base.js';
+
+let _bundledPromise = null;
+function bundledParsers() {
+  if (!_bundledPromise) _bundledPromise = import('./web-parsers/index.js');
+  return _bundledPromise;
+}
 
 const PROXY_KEY = 'nyora.webParser.proxyUrl';
 const SOURCE_PREFS_KEY = 'nyora.webParser.sources';
@@ -111,7 +116,7 @@ async function parserRuntime() {
         version: 0,
         source: 'bundled',
         sources: null,
-        getParser: bundledGetParser,
+        getParser: (...args) => bundledParsers().then((m) => m.getParser(...args)),
       };
     });
   }
@@ -210,7 +215,7 @@ export function applySourcePrefRows(rows) {
 
 async function loadSources() {
   if (!sourcesPromise) {
-    sourcesPromise = parserRuntime().then(async (runtime) => runtime.sources || bundledGetAllSources());
+    sourcesPromise = parserRuntime().then(async (runtime) => runtime.sources || (await bundledParsers()).getAllSources());
   }
   return sourcesPromise;
 }

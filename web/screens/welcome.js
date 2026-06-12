@@ -167,13 +167,17 @@ export function showWelcome(onDone) {
 
   const stage = el('div', { class: 'wlc-inner' }, hero, auth);
 
+  // Phones get a much lighter scene — far fewer raindrops, and (via CSS) no
+  // backdrop blur / lightning — so the welcome doesn't lag low-power GPUs.
+  const small = typeof matchMedia === 'function' && matchMedia('(max-width: 900px)').matches;
+
   const overlay = el('div', { class: 'wlc', role: 'dialog', 'aria-label': 'Welcome to Nyora', 'aria-modal': 'true' },
     el('div', { class: 'wlc-sky', 'aria-hidden': 'true' },
       el('span', { class: 'wlc-glow wlc-glow-1' }),
       el('span', { class: 'wlc-glow wlc-glow-2' }),
       el('span', { class: 'wlc-mist' }),
-      rainLayer(60, 'is-back'),
-      rainLayer(80, 'is-front'),
+      rainLayer(small ? 0 : 60, 'is-back'),
+      rainLayer(small ? 22 : 80, 'is-front'),
       el('span', { class: 'wlc-flash' }),
       el('span', { class: 'wlc-horizon' }),
       el('span', { class: 'wlc-vignette' }),
