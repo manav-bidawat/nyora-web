@@ -649,8 +649,8 @@ function requestGoogleIdToken() {
       modal = host;
       try {
         google.accounts.id.renderButton(slot, {
-          theme: 'filled_blue', size: 'large', shape: 'pill',
-          text: 'signin_with', logo_alignment: 'center', width: 260,
+          theme: 'outline', size: 'large', shape: 'pill',
+          text: 'signin_with', logo_alignment: 'center',
         });
       } catch (_) { /* GIS not ready — safety timer / cancel still apply */ }
     };
