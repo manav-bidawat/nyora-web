@@ -7,7 +7,7 @@
  *   - proxied cover/page images               -> cache-first (immutable-ish)
  *   - everything else / API                   -> network-first, cache fallback
  */
-const VERSION = 'nyora-v25';
+const VERSION = 'nyora-v26';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 const IMAGES = `${VERSION}-img`;
@@ -18,6 +18,8 @@ const SHELL_ASSETS = [
   '/styles.css',
   '/env.js',
   '/app.js',
+  '/core/motion.js',
+  '/vendor/gsap.min.js',
   '/icon.png',
   '/manifest.webmanifest',
 ];

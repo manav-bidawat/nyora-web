@@ -187,6 +187,21 @@ export function showWelcome(onDone) {
 
   document.documentElement.classList.add('wlc-open');
   document.body.appendChild(overlay);
+
+  // Awwwards-style staggered entrance for the welcome content (GSAP is loaded
+  // globally; no-op when absent or under reduced-motion, so content never hides).
+  try {
+    const gsap = window.gsap;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (gsap && !reduce) {
+      const items = overlay.querySelectorAll(
+        '.wlc-brand, .wlc-eyebrow, .wlc-title, .wlc-sub, .wlc-features, .wlc-auth',
+      );
+      gsap.fromTo(items,
+        { y: 26, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.12 });
+    }
+  } catch { /* motion is optional polish */ }
 }
 
 export default { shouldShowWelcome, showWelcome };

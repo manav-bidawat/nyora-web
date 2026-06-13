@@ -13,6 +13,11 @@
 /* ---- tokens ---------------------------------------------------------- */
 :root,
 :root[data-theme="DARK"] {
+  /* Type system — Awwwards-grade pairing (Fontshare): Clash Display for
+     headlines, Satoshi for everything else. System fallbacks keep the UI
+     usable before the webfonts land / when offline. */
+  --font-display: "Clash Display", "Satoshi", -apple-system, system-ui, sans-serif;
+  --font-body: "Satoshi", -apple-system, system-ui, "Segoe UI", sans-serif;
   --bg: #000000;
   --bg-elev: #090909;           /* neutral near-black (was blue-tinted #0a0a0e) */
   --surface1: #111111;          /* cards / panes / rows — neutral, no cool cast */
@@ -227,10 +232,11 @@ body {
   background: var(--bg-tint), var(--bg);
   background-attachment: fixed;
   color: var(--text);
-  font-family: "Outfit", sans-serif;
+  font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   display: flex;
   min-height: 100vh;
@@ -247,6 +253,16 @@ h1, h2, h3, .brand, .page-title, .source-name, .hero-card h1 {
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 button, input, select, textarea { font-family: inherit; color: inherit; }
+
+/* Display type — headlines & section heads carry the Clash Display face with
+   tightened tracking for that editorial, designed-from-scratch feel. */
+h1, h2, h3,
+.page-title, .section-head, .section-head h2,
+.hero-card h1, .wlc-eyebrow, .brand span {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  font-feature-settings: "ss01", "cv01";
+}
 button { cursor: pointer; }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
@@ -2101,9 +2117,9 @@ body.reader-active .view {
 }
 
 .brand span {
-  font-family: "Syne", sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.1em !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
   font-size: 16px;
 }
 /* ---- GIS account-chooser fallback modal ------------------------------- */
@@ -2269,8 +2285,8 @@ body.reader-active .view {
 }
 
 .wlc-title {
-  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(46px, 6.4vw, 84px);
   line-height: 0.98;
   letter-spacing: -0.005em;

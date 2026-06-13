@@ -7,6 +7,7 @@
 import { store, router } from './core/store.js';
 import { el, icon, $, toast } from './core/ui.js';
 import library from './core/library.js';
+import { revealView } from './core/motion.js';
 
 import { meta as exploreMeta, render as exploreRender } from './screens/explore.js';
 import { meta as libraryMeta, render as libraryRender } from './screens/library.js';
@@ -138,6 +139,7 @@ function dispatch(route) {
   if (label) label.textContent = (store.source && store.source.name) || 'Sources';
   try {
     fn(view, route.params || {});
+    revealView(view, name);
   } catch (e) {
     view.replaceChildren(el('div', { class: 'error-box' }, String((e && e.message) || e)));
   }
