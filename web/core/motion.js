@@ -43,17 +43,19 @@ export function revealView(view, routeName) {
 
   gsap.killTweensOf([...heads, ...tiles]);
 
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  // Calm, minimal motion: a short fade + small lift, no scale — quiet and
+  // editorial rather than springy.
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
   if (heads.length) {
     tl.fromTo(heads,
-      { y: 16, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.05 }, 0);
+      { y: 12, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.45, stagger: 0.045 }, 0);
   }
   if (tiles.length) {
     tl.fromTo(tiles,
-      { y: 24, autoAlpha: 0, scale: 0.985 },
-      { y: 0, autoAlpha: 1, scale: 1, duration: 0.55, stagger: 0.035 },
-      heads.length ? 0.06 : 0);
+      { y: 14, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.45, stagger: 0.03 },
+      heads.length ? 0.05 : 0);
   }
 }
 
