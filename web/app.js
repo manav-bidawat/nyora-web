@@ -102,6 +102,7 @@ const view = $('#view');
 function dispatch(route) {
   const name = routes[route.name] ? route.name : 'explore';
   const fn = routes[name];
+  document.body.dataset.route = name;
   document.title = (metas[name] && metas[name].title) ? metas[name].title + ' · Nyora' : 'Nyora';
 
   // Leaving the reader for any other screen: run its teardown so the immersive
@@ -194,12 +195,109 @@ function buildSidebar() {
 function buildMobileNav() {
   const topbar = $('#topbar');
   if (topbar && !$('#navToggle')) {
-    const toggle = el('button', { id: 'navToggle', class: 'nav-toggle', 'aria-label': 'Menu', onClick: () => document.body.classList.toggle('nav-open') }, icon('menu'));
+    const toggle = el('button', { id: 'navToggle', class: 'nav-toggle', 'aria-label': 'Menu', onClick: () => document.body.classList.toggle('nav-open') },
+      icon('menu'),
+      el('span', { class: 'nav-toggle-label' }, 'Menu'),
+    );
     topbar.insertBefore(toggle, topbar.firstChild);
   }
+  if (topbar && !$('#mobileBrand')) {
+    const brand = el('button', {
+      id: 'mobileBrand',
+      class: 'mobile-brand',
+      type: 'button',
+      'aria-label': 'Go to Discover',
+      onClick: () => router.navigate('suggestions'),
+    },
+      el('img', { src: '/icon.png', alt: '', class: 'mobile-brand-logo' }),
+      el('span', { class: 'mobile-brand-text' }, 'NYORA'),
+    );
+    const toggle = $('#navToggle');
+    topbar.insertBefore(brand, toggle ? toggle.nextSibling : topbar.firstChild);
+  }
+  if (topbar && !$('#mobileSearch')) {
+    const search = el('button', {
+      id: 'mobileSearch',
+      class: 'mobile-search-action',
+      type: 'button',
+      'aria-label': 'Search',
+      onClick: () => openMobileSearch(),
+    }, icon('search'));
+    const toggle = $('#navToggle');
+    topbar.insertBefore(search, toggle || null);
+  }
+  buildMobileSearchPanel();
   if (!$('#navScrim')) {
     document.body.appendChild(el('div', { id: 'navScrim', class: 'nav-scrim', onClick: () => document.body.classList.remove('nav-open') }));
   }
+}
+
+function closeMobileSearch() {
+  document.body.classList.remove('search-open');
+}
+
+function openMobileSearch() {
+  const panel = $('#mobileSearchPanel');
+  const input = $('#mobileSearchInput');
+  if (!panel || !input) {
+    router.navigate('search');
+    return;
+  }
+  const current = router.current();
+  input.value = current.name === 'search' && current.params && current.params.q ? current.params.q : '';
+  document.body.classList.remove('nav-open');
+  document.body.classList.add('search-open');
+  requestAnimationFrame(() => {
+    input.focus({ preventScroll: true });
+    try { input.setSelectionRange(input.value.length, input.value.length); } catch { /* ignore */ }
+  });
+}
+
+function buildMobileSearchPanel() {
+  if ($('#mobileSearchPanel')) return;
+  const input = el('input', {
+    id: 'mobileSearchInput',
+    type: 'search',
+    placeholder: 'Search all sources',
+    autocomplete: 'off',
+    enterkeyhint: 'search',
+    'aria-label': 'Search all sources',
+  });
+  const submit = el('button', {
+    class: 'mobile-search-submit',
+    type: 'submit',
+    'aria-label': 'Search',
+  }, icon('chevron'));
+  const close = el('button', {
+    class: 'mobile-search-close',
+    type: 'button',
+    'aria-label': 'Close search',
+    onClick: () => closeMobileSearch(),
+  }, icon('close'));
+  const form = el('form', {
+    id: 'mobileSearchPanel',
+    class: 'mobile-search-panel',
+    role: 'search',
+    onSubmit: (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      closeMobileSearch();
+      if (q) router.navigate('search', { q });
+      else router.navigate('search');
+    },
+  },
+    el('div', { class: 'mobile-search-field' },
+      icon('search'),
+      input,
+      submit,
+    ),
+    close,
+  );
+  const scrim = el('div', { id: 'mobileSearchScrim', class: 'mobile-search-scrim', onClick: () => closeMobileSearch() });
+  document.body.append(scrim, form);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileSearch();
+  });
 }
 
 // Mobile bottom tab bar (app-like). Mirrors the 5 primary destinations; the

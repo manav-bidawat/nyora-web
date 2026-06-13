@@ -19,10 +19,42 @@ export function render(view, params) {
   let query = (params && params.q != null ? String(params.q) : '').trim();
 
   const title = el('h1', { class: 'page-title', style: { marginBottom: '8px' } }, query ? `Results for “${query}”` : 'Global Search');
+  const searchInput = el('input', {
+    id: 'searchPageInput',
+    type: 'search',
+    value: query,
+    placeholder: 'Search all sources',
+    autocomplete: 'off',
+    enterkeyhint: 'search',
+  });
+  const searchForm = el('form', {
+    class: 'search-page-header',
+    onSubmit: (e) => {
+      e.preventDefault();
+      const next = searchInput.value.trim();
+      if (!next) {
+        router.navigate('search');
+        return;
+      }
+      router.navigate('search', { q: next });
+    },
+  },
+    el('div', { class: 'search-field-v2' },
+      icon('search'),
+      searchInput,
+      btn('Search', { variant: 'accent', class: 'btn-sm', type: 'submit' }),
+    ),
+  );
   const status = el('div', { class: 'search-status', style: { marginBottom: '24px' } });
   const results = el('div', { class: 'search-results' });
 
-  view.append(title, status, results);
+  view.append(title, searchForm, status, results);
+  requestAnimationFrame(() => {
+    if (!query || document.body.dataset.route === 'search') {
+      searchInput.focus({ preventScroll: true });
+      try { searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length); } catch { /* ignore */ }
+    }
+  });
 
   function sourceSection(src) {
     const sid = src.id;
@@ -109,7 +141,7 @@ export function render(view, params) {
   function renderEmpty() {
     title.textContent = 'Global Search';
     status.replaceChildren();
-    results.replaceChildren(emptyState('Type in the top bar to search all sources', 'search'));
+    results.replaceChildren(emptyState('Search across every installed source', 'search'));
   }
 
   async function runSearch() {

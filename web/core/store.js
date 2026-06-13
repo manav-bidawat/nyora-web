@@ -29,11 +29,13 @@ export const ACCENT_PALETTE = [
   '#f43f5e', // Rose
 ];
 
-const FALLBACK_ACCENT = '#ef4444'; // Use Red as fallback
+const WALLPAPER_ACCENT = 'wallpaper';
+const LEGACY_AUTO_ACCENT = 'auto';
+const FALLBACK_ACCENT = '#88ce02'; // Used only when the OS/browser exposes no accent.
 
 const DEFAULT_PREFS = {
   appearance: 'DARK', // 'DARK' | 'LIGHT'
-  accent: '#ef4444',    // Default to Red
+  accent: WALLPAPER_ACCENT,
   showNsfw: false,
   reader: {
     mode: 'WEBTOON', // 'WEBTOON' | 'PAGED' | 'PAGED_RTL'
@@ -74,10 +76,12 @@ export function detectBrowserAccent() {
   return _browserAccent;
 }
 
-/** Resolve the effective accent hex from a pref value ('auto' or a hex). */
+/** Resolve the effective accent hex from a pref value ('wallpaper', legacy 'auto', or a hex). */
 export function resolveAccent(pref) {
   if (pref && pref !== 'auto' && /^#[0-9a-fA-F]{6}$/.test(pref)) return pref;
-  if (pref === 'auto') return detectBrowserAccent() || FALLBACK_ACCENT;
+  if (pref === WALLPAPER_ACCENT || pref === LEGACY_AUTO_ACCENT) {
+    return detectBrowserAccent() || FALLBACK_ACCENT;
+  }
   return pref || FALLBACK_ACCENT;
 }
 
@@ -210,9 +214,13 @@ function createStore() {
     const onAccent = brightness > 180 ? '#000000' : '#ffffff';
     root.style.setProperty('--on-accent', onAccent);
 
-    // theme-color for mobile browser chrome / PWA: tint with the accent on dark.
+    // theme-color for mobile browser chrome / PWA. <meta> can't use var(), so
+    // resolve the concrete value of the --bg token instead of hardcoding a literal.
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'LIGHT' ? '#ffffff' : '#000000');
+    if (meta) {
+      const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+      if (bg) meta.setAttribute('content', bg);
+    }
   }
 
   store.applyTheme = applyTheme;

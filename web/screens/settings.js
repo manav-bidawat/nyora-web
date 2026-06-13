@@ -64,7 +64,7 @@ function swatch(background, { active, title, glyph, onChoose } = {}) {
     style: { background }, title: title || '', role: 'button', tabindex: '0',
   });
   if (glyph) {
-    Object.assign(sw.style, { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: 'var(--on-accent, #fff)' });
+    Object.assign(sw.style, { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: 'var(--on-accent)' });
     sw.textContent = glyph;
   }
   const choose = () => onChoose && onChoose(sw);
@@ -94,12 +94,13 @@ function buildAppearance() {
   const swatches = el('div', { class: 'swatches' });
   const currentAccent = prefs.accent;
   const clearActive = () => { for (const child of Array.from(swatches.children)) child.classList.remove('active'); };
-  const autoPreview = detectBrowserAccent() || resolveAccent('auto');
-  swatches.appendChild(swatch(autoPreview, { active: currentAccent === 'auto', title: 'Auto', glyph: 'A', onChoose: (node) => { store.set({ accent: 'auto' }); clearActive(); node.classList.add('active'); } }));
+  const wallpaperPreview = detectBrowserAccent() || resolveAccent('wallpaper');
+  const wallpaperActive = currentAccent === 'wallpaper' || currentAccent === 'auto';
+  swatches.appendChild(swatch(wallpaperPreview, { active: wallpaperActive, title: 'Wallpaper', glyph: 'W', onChoose: (node) => { store.set({ accent: 'wallpaper' }); clearActive(); node.classList.add('active'); } }));
   for (const hex of ACCENT_PALETTE) {
     swatches.appendChild(swatch(hex, { active: currentAccent === hex, title: hex, onChoose: (node) => { store.set({ accent: hex }); clearActive(); node.classList.add('active'); } }));
   }
-  section.append(field('Accent', swatches, 'Auto follows your browser accent colour.'));
+  section.append(field('Accent', swatches, 'Wallpaper follows your browser or OS accent colour by default.'));
   return section;
 }
 
@@ -275,7 +276,7 @@ function buildAbout() {
     el('div', { style: { marginTop: '18px' } },
       el('a', {
         href: 'https://nyora.pages.dev', target: '_blank', rel: 'noopener',
-        style: { color: 'var(--accent, #6c5ce7)', fontSize: '13px', textDecoration: 'none', fontWeight: '600' },
+        style: { color: 'var(--accent)', fontSize: '13px', textDecoration: 'none', fontWeight: '600' },
       }, 'Official website ↗'),
     )
   );

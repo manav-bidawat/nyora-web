@@ -80,44 +80,31 @@ export function render(view, _params) {
     activeCategoryId: null, // null = "All"
     sources: [],
     sort: 'recent',
-    query: '',
   };
 
   // --- header: title + subtle count -------------------------------------
   const countEl = el('span', {
     style: { color: 'var(--text-faint)', fontSize: '13px', fontWeight: '600', whiteSpace: 'nowrap' },
   });
-  const header = el('div', { class: 'section-header', style: { marginTop: '0', marginBottom: '16px' } },
+  const header = el('div', { class: 'section-header library-header', style: { marginTop: '0', marginBottom: '16px' } },
     el('h1', { class: 'page-title', style: { margin: '0' } }, 'Library'),
     el('div', { class: 'section-actions' }, countEl),
   );
-
-  // --- search -----------------------------------------------------------
-  const searchInput = el('input', {
-    type: 'search',
-    placeholder: 'Search favourites by title…',
-    'aria-label': 'Search favourites',
-    onInput: (e) => {
-      state.query = e.target.value;
-      renderGrid();
-    },
-  });
-  const searchField = el('div', { class: 'field', style: { marginBottom: '14px' } }, searchInput);
 
   // --- sort row ---------------------------------------------------------
   const sortSeg = segmented(SORTS, state.sort, (v) => {
     state.sort = v;
     renderGrid();
   });
-  const sortRow = el('div', { class: 'row', style: { marginBottom: '14px' } }, sortSeg);
+  const sortRow = el('div', { class: 'row library-sort-row', style: { marginBottom: '14px' } }, sortSeg);
 
   // --- category chips ---------------------------------------------------
-  const chipsEl = el('div', { class: 'chips', style: { marginBottom: '20px' } });
+  const chipsEl = el('div', { class: 'chips library-filter-row', style: { marginBottom: '20px' } });
 
   // --- grid -------------------------------------------------------------
   const gridHost = el('div');
 
-  view.append(header, searchField, sortRow, chipsEl, gridHost);
+  view.append(header, sortRow, chipsEl, gridHost);
 
   // ---- data helpers --------------------------------------------------
 
@@ -125,12 +112,6 @@ export function render(view, _params) {
     return state.activeCategoryId == null
       ? (library.favourites().entries || [])
       : (library.categoryManga(state.activeCategoryId).entries || []);
-  }
-
-  function applyQuery(entries) {
-    const q = state.query.trim().toLowerCase();
-    if (!q) return entries;
-    return entries.filter((m) => String((m && m.title) || '').toLowerCase().includes(q));
   }
 
   function updateCount() {
@@ -150,7 +131,7 @@ export function render(view, _params) {
   function renderGrid() {
     let entries;
     try {
-      entries = applyQuery(sortEntries(favEntries(), state.sort));
+      entries = sortEntries(favEntries(), state.sort);
     } catch (e) {
       gridHost.replaceChildren(errorBox(e.message));
       return;
@@ -176,10 +157,6 @@ export function render(view, _params) {
 
   function renderEmpty() {
     // Distinguish a no-match search / empty category from a truly empty library.
-    const q = state.query.trim();
-    if (q) {
-      return emptyState(`No favourites match “${q}”.`, 'search');
-    }
     if (state.activeCategoryId != null) {
       const cat = state.categories.find((c) => c.id === state.activeCategoryId);
       const wrap = emptyState(
