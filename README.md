@@ -17,6 +17,23 @@ A **100% client-side** manga reader that runs entirely in your browser — no ba
 
 ---
 
+## 📸 Screenshots
+
+### Mobile
+
+| Welcome | Discover | Library | Settings |
+|:-:|:-:|:-:|:-:|
+| ![Welcome](docs/screenshots/mobile/welcome.png) | ![Discover](docs/screenshots/mobile/discover.png) | ![Library](docs/screenshots/mobile/library.png) | ![Settings](docs/screenshots/mobile/settings.png) |
+
+### Desktop
+
+| Discover | Settings |
+|:-:|:-:|
+| ![Discover](docs/screenshots/desktop/discover.png) | ![Settings](docs/screenshots/desktop/settings.png) |
+| ![Welcome](docs/screenshots/desktop/welcome.png) | ![Library](docs/screenshots/desktop/library.png) |
+
+---
+
 ## ✨ Features
 
 - 🌍 **Read in any browser** — desktop or mobile; installable as a **PWA** with an offline app shell.
