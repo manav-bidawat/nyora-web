@@ -1,80 +1,78 @@
-# Nyora Web
+<div align="center">
 
-A **100% client-side** browser build of the **Nyora** manga reader. There is no
-backend: catalog/search/details/page parsing all runs **in the browser**, and
-the app deploys as plain static files.
+<img src="https://nyora.pages.dev/icon.png" width="112" alt="Nyora"/>
 
-## Features
+# Nyora — Web
 
-- **Read in any browser** — no install; works on desktop and mobile browsers, installable as a PWA with an offline app shell (service worker).
-- **Huge source catalogue** — browse, search and filter hundreds of online manga/manhwa/manhua sources, parsed entirely client-side (parser bundles loaded over-the-air, SHA-256 verified, with bundled fallbacks).
-- **Standard & Webtoon reader** — paged (LTR/RTL) and vertical webtoon modes with per-title settings.
-- **Library that stays organized** — favourites in custom categories and reading history.
-- **AniList tracking** — connect AniList (talks to its GraphQL API directly from the browser) to keep progress in sync.
-- **Cloud sync** — sign in with Google; your library **and source preferences** (installed/pinned) sync per-row across devices via Supabase (last-write-wins).
-- **Self-hostable** — deploys as static files to any host; the only server-side piece is a tiny Cloudflare Worker that proxies CORS/images.
+### Read like the world can wait.
 
-## Architecture
+A **100% client-side** manga reader that runs entirely in your browser — no backend, no install. Built from scratch as a static SPA; catalogue, search and page parsing all happen client-side.
 
-```
-nyora-web/
-├── web/                 ← the SPA (this is what gets deployed)
-│   ├── index.html, app.js, styles.css, sw.js
-│   ├── core/            ← api, parser-runtime, sync, ui, library, store
-│   └── core/web-parsers/← bundled parser fallbacks + sources.json
-├── cloudflare-worker/   ← the CORS / image proxy worker (worker.js + wrangler.toml)
-└── netlify.toml         ← static publish config (publish = "web")
-```
+[![License: Apache 2.0](https://img.shields.io/github/license/Hasan72341/nyora-web?color=blue)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/Hasan72341/nyora-web?style=social)](https://github.com/Hasan72341/nyora-web/stargazers)
 
-- **Parsing runs in-browser.** `core/parser-runtime.js` loads JS parser bundles
-  over-the-air (`hasan72341.github.io/nyora-ota-parsers`, SHA-256 verified, with
-  the bundled `core/web-parsers/` as fallback) and executes them client-side.
-- **CORS bypass = the Cloudflare worker.** Manga sites don't send
-  `Access-Control-Allow-Origin`, so the parser fetches HTML through the worker
-  (`<proxy>/proxy?url=…`) and loads cover/page images through it
-  (`<proxy>/image?u=…&h=Referer:…`), which adds the source `Referer`/`UA`.
-  Many CDNs serve covers/pages directly to an `<img>`, so the app tries direct
-  first and only falls back to the worker. The worker is the **only** server-side
-  piece, and it does nothing but proxy.
-- **AniList tracker is direct.** AniList's GraphQL API is CORS-enabled (it
-  allows the `Authorization` header), so `core/api.js` talks to
-  `https://graphql.anilist.co` straight from the browser — no proxy.
-- **Account sync is client-side.** `core/sync.js` uses Google Identity Services
-  for an ID token, exchanges it with Supabase Auth, and reads/writes through the
-  `nyora-sync` Supabase edge function. Library **and source prefs** (installed/
-  pinned) sync per-row with last-write-wins.
+**[🌍 Open the app — nyoraweb.pages.dev](https://nyoraweb.pages.dev)** · **[🌐 nyora.pages.dev](https://nyora.pages.dev)**
 
-## Run locally
+</div>
 
-It's static — serve the `web/` folder with anything:
+---
+
+## ✨ Features
+
+- 🌍 **Read in any browser** — desktop or mobile; installable as a **PWA** with an offline app shell.
+- 📚 **Hundreds of online sources** — parsed entirely client-side (parser bundles loaded over-the-air, SHA-256 verified, with bundled fallbacks).
+- 📖 **Standard & Webtoon reader** — LTR / RTL / vertical, per-title settings.
+- 🗂️ Favourites in custom categories + reading history.
+- 🔄 **AniList tracking** (direct from the browser) and ☁️ **cloud sync** (Google sign-in; library + source prefs sync per-row via Supabase).
+- 🚀 **Self-hostable** — deploys as static files anywhere; the only server-side piece is a tiny Cloudflare Worker that proxies CORS/images.
+
+## ▶️ Use it
+
+Just open **[nyoraweb.pages.dev](https://nyoraweb.pages.dev)** — sign in with Google to sync with your other Nyora devices.
+
+## 🧑‍💻 Run / self-host
+
+It's static — serve `web/` with anything:
 
 ```bash
-cd web
-python3 -m http.server 3000
-# → open http://127.0.0.1:3000
+cd web && python3 -m http.server 3000   # → http://127.0.0.1:3000
 ```
 
-Use **`http://127.0.0.1:3000`** specifically: it's the JavaScript origin
-authorized in the Google OAuth client, so Google sign-in works there. Other
-origins fail with `Error 400: origin_mismatch` — add them in Google Cloud first.
+Use `127.0.0.1:3000` (the origin registered for Google sign-in). The CORS/image proxy is a Cloudflare Worker in `cloudflare-worker/` (`npx wrangler deploy`). Any static host works (Cloudflare Pages, Netlify, …). See the sections below for details.
 
-The parser worker URL can be overridden at runtime via the
-`nyora.webParser.proxyUrl` localStorage key (defaults to the bundled worker).
+## 🧩 Nyora on every platform
 
-## The Cloudflare worker
+| Platform | Repo | Get it |
+|---|---|---|
+| 🌍 Web | **nyora-web** *(you are here)* | [nyoraweb.pages.dev](https://nyoraweb.pages.dev) |
+| 🤖 Android | [nyora-android](https://github.com/Hasan72341/nyora-android) | [APK](https://github.com/Hasan72341/nyora-android/releases/latest) |
+| 🪟 Windows | [nyora-windows](https://github.com/Hasan72341/nyora-windows) | [.exe (x64/ARM64)](https://github.com/Hasan72341/nyora-windows/releases/latest) |
+| 🍎 macOS | [nyora-mac](https://github.com/Hasan72341/nyora-mac) | [.dmg / `brew`](https://github.com/Hasan72341/nyora-mac/releases/latest) |
+| 🐧 Linux | [nyora-linux](https://github.com/Hasan72341/nyora-linux) | [deb · rpm · curl](https://github.com/Hasan72341/nyora-linux/releases/latest) |
+| 📱 iOS / iPadOS | [nyora-ios](https://github.com/Hasan72341/nyora-ios) | [sideload IPA](https://github.com/Hasan72341/nyora-ios/releases/latest) |
 
-```bash
-cd cloudflare-worker
-npx wrangler@latest login      # first time
-npx wrangler@latest deploy     # publishes nyora-cors-proxy
+## 🏗️ Architecture
+
+```
+web/                  ← the SPA (deployed)
+  core/               ← api · parser-runtime · sync · ui · library · store
+cloudflare-worker/    ← CORS / image proxy (worker.js)
 ```
 
-See `cloudflare-worker/worker.js` — it serves `/proxy?url=` (HTML) and
-`/image?u=…&h=Name:Value` (images, applying the source-site Referer/UA).
+- **Parsing runs in-browser** — `core/parser-runtime.js` loads JS parser bundles OTA (SHA-256 verified, bundled fallback) and executes them client-side.
+- **CORS bypass = the Cloudflare worker** — manga sites don't send CORS headers, so HTML/images are fetched through `<proxy>/proxy?url=…` / `<proxy>/image?u=…` (which adds the source `Referer`/`UA`). The app tries direct first and only falls back to the worker.
+- **Account sync is client-side** — Google Identity → Supabase Auth → per-row library + source-pref sync (last-write-wins).
 
-## Deploy
+## 🤝 Contributing
 
-Static hosting. On Netlify the included `netlify.toml` publishes `web/`; the
-SPA fallback lives in `web/_redirects`. Any static host works (Netlify, Pages,
-S3+CDN, …) — just serve `web/` and register the deployed origin in Google Cloud
-for sign-in.
+Issues & PRs welcome. ⭐ **Star the repo** if you like Nyora!
+
+## 📄 License
+
+Licensed under the **Apache License 2.0** (see [`LICENSE`](LICENSE)). Original code, built from scratch — source-compatible with Tachiyomi/Kotatsu-style sources but not a fork.
+
+## 🙏 Credits
+
+Developed & maintained by **Md Hasan Raza** — [GitHub](https://github.com/Hasan72341) · [Instagram](https://instagram.com/md_hasan_raza____) · [LinkedIn](https://www.linkedin.com/in/md-hasan-raza) · hasanraza96@outlook.com
+
+> Nyora is not affiliated with any of the manga sources it can access.
