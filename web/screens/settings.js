@@ -271,6 +271,12 @@ function buildAbout() {
       socialLink('linkedin', 'https://www.linkedin.com/in/md-hasan-raza-8817372a7/', 'LinkedIn'),
       socialLink('github', 'https://github.com/Hasan72341', 'GitHub'),
       socialLink('mail', 'mailto:hasanraza96@outlook.com', 'Email'),
+    ),
+    el('div', { style: { marginTop: '18px' } },
+      el('a', {
+        href: 'https://nyora.pages.dev', target: '_blank', rel: 'noopener',
+        style: { color: 'var(--accent, #6c5ce7)', fontSize: '13px', textDecoration: 'none', fontWeight: '600' },
+      }, 'Official website ↗'),
     )
   );
 
