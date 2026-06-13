@@ -15,7 +15,29 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-QB24SS0TMN');
+    // SPA: the app is a hash router, so disable the automatic page_view and send
+    // one virtual page_view per screen instead (initial load + every navigation).
+    gtag('config', 'G-QB24SS0TMN', { send_page_view: false });
+    (function () {
+      function screenPath() {
+        var p = (location.hash || '').replace(/^#/, '').split('?')[0]; // drop ?sid/url params
+        return p && p !== '/' ? p : '/explore';
+      }
+      var last = null;
+      function track() {
+        if (typeof gtag !== 'function') return;
+        var path = screenPath();
+        if (path === last) return;            // ignore param-only changes / repeats
+        last = path;
+        var name = path.replace(/^\//, '').split('/')[0] || 'home';
+        gtag('event', 'page_view', {
+          page_title: 'Nyora · ' + name.charAt(0).toUpperCase() + name.slice(1),
+          page_location: location.origin + '/#' + path,
+        });
+      }
+      addEventListener('hashchange', track);
+      addEventListener('load', track);
+    })();
   </script>
 
   <link rel="icon" href="/icon.png" />

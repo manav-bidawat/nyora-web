@@ -7,7 +7,7 @@
  *   - proxied cover/page images               -> cache-first (immutable-ish)
  *   - everything else / API                   -> network-first, cache fallback
  */
-const VERSION = 'nyora-v21';
+const VERSION = 'nyora-v22';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 const IMAGES = `${VERSION}-img`;
