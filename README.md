@@ -25,6 +25,11 @@ A fast, free, ad-free, open-source manga reader that runs entirely in your brows
 [![Open Web App](https://img.shields.io/badge/Open-Web_App-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](https://nyoraweb.pages.dev)
 [![Website](https://img.shields.io/badge/Website-nyora.pages.dev-FF4655?style=for-the-badge&logo=githubpages&logoColor=white)](https://nyora.pages.dev)
 
+<br/>
+
+**No download. No sign-up. Just open the link and read.**
+Open-source and auditable · no ads · no tracking · your library stays yours.
+
 </div>
 
 ---
@@ -35,14 +40,14 @@ A fast, free, ad-free, open-source manga reader that runs entirely in your brows
 
 | Welcome | Discover | Library | Settings |
 |:-:|:-:|:-:|:-:|
-| ![Welcome](docs/screenshots/mobile/welcome.png) | ![Discover](docs/screenshots/mobile/discover.png) | ![Library](docs/screenshots/mobile/library.png) | ![Settings](docs/screenshots/mobile/settings.png) |
+| ![Welcome](docs/screenshots/mobile/welcome.png)<br/>**Welcome** — Start reading instantly on mobile web. | ![Discover](docs/screenshots/mobile/discover.png)<br/>**Discover** — Trending titles tuned for a phone screen. | ![Library](docs/screenshots/mobile/library.png)<br/>**Library** — The same library, responsive down to mobile. | ![Settings](docs/screenshots/mobile/settings.png)<br/>**Settings** — Full settings in the mobile web app. |
 
 ### Desktop
 
 | Discover | Settings |
 |:-:|:-:|
-| ![Discover](docs/screenshots/desktop/discover.png) | ![Settings](docs/screenshots/desktop/settings.png) |
-| ![Welcome](docs/screenshots/desktop/welcome.png) | ![Library](docs/screenshots/desktop/library.png) |
+| ![Discover](docs/screenshots/desktop/discover.png)<br/>**Discover** — Trending manga the moment the page loads. | ![Settings](docs/screenshots/desktop/settings.png)<br/>**Settings** — Reader, sync and appearance, right in the browser. |
+| ![Welcome](docs/screenshots/desktop/welcome.png)<br/>**Welcome** — Sign in with Google, continue as guest, or restore a backup — no account required. | ![Library](docs/screenshots/desktop/library.png)<br/>**Library** — Your shelf in any browser, with nothing to install. |
 
 </div>
 
@@ -51,6 +56,15 @@ A fast, free, ad-free, open-source manga reader that runs entirely in your brows
 ## About
 
 Nyora Web is the browser-native edition of Nyora — a free, ad-free, open-source manga, manhwa and manhua reader. No app store, no download, no sign-up wall: open a tab and you are reading, on a laptop, a phone, or anything with a modern browser. It is built from scratch as a **100% client-side static SPA** — the source catalogue, the search, and the parsers that turn a manga site into clean, readable pages all run on your machine. Add it to your home screen and Nyora becomes a real PWA with an offline app shell. Sign in with Google and your library and source preferences follow you to every other Nyora platform. The only server-side component is a tiny Cloudflare Worker that proxies CORS and images — everything else is just static files you can host anywhere.
+
+## Why you'll love it
+
+- **Nothing to install.** It's a website. Click the link and you're reading in seconds — no store, no APK, no Gatekeeper prompt. Want an app icon? Add it to your home screen and it behaves like a native app.
+- **No ads, ever. No tracking, ever.** There is no advertising SDK and no telemetry pipeline anywhere in the code. The app talks only to the sources you browse, an optional image proxy, and — only if *you* sign in — Supabase for sync.
+- **No account to read.** Open the app and start. Sign-in is entirely optional and exists for one reason: syncing your library across your devices.
+- **Your library is yours.** Reading state lives on your device, and — if you sign in — in Supabase rows tied to your own account. There's no Nyora-operated backend quietly collecting what you read.
+- **Auditable and yours to keep.** Apache-2.0, original code, built from scratch. You can read every line, fork it, or self-host the whole thing — even off a USB stick.
+- **One library, every screen.** Favourite something on the web and it's waiting on Android, iOS, macOS, Windows and Linux, on the same chapter and page you left off.
 
 ## Highlights
 
@@ -67,6 +81,7 @@ Nyora Web is the browser-native edition of Nyora — a free, ad-free, open-sourc
 ## Table of Contents
 
 - [About](#about)
+- [Why you'll love it](#why-youll-love-it)
 - [Highlights](#highlights)
 - [Features](#features)
   - [Sources & Discovery](#sources--discovery)
@@ -88,6 +103,12 @@ Nyora Web is the browser-native edition of Nyora — a free, ad-free, open-sourc
 - [Roadmap](#roadmap)
 - [FAQ](#faq)
 - [Contributing](#contributing)
+  - [Ways to contribute](#ways-to-contribute)
+  - [Development setup](#development-setup)
+  - [Project structure](#project-structure)
+  - [Good first contributions](#good-first-contributions)
+  - [Adding a source](#adding-a-source)
+  - [Pull request & issue etiquette](#pull-request--issue-etiquette)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
 
@@ -159,32 +180,41 @@ Nyora Web is deliberately a pure client-side reader. Honest constraints to know 
 
 | Welcome | Discover | Library | Settings |
 |:-:|:-:|:-:|:-:|
-| ![Welcome](docs/screenshots/mobile/welcome.png) | ![Discover](docs/screenshots/mobile/discover.png) | ![Library](docs/screenshots/mobile/library.png) | ![Settings](docs/screenshots/mobile/settings.png) |
+| ![Welcome](docs/screenshots/mobile/welcome.png)<br/>**Welcome** — Start reading instantly on mobile web. | ![Discover](docs/screenshots/mobile/discover.png)<br/>**Discover** — Trending titles tuned for a phone screen. | ![Library](docs/screenshots/mobile/library.png)<br/>**Library** — The same library, responsive down to mobile. | ![Settings](docs/screenshots/mobile/settings.png)<br/>**Settings** — Full settings in the mobile web app. |
 
 ### Desktop
 
 | Discover | Settings |
 |:-:|:-:|
-| ![Discover](docs/screenshots/desktop/discover.png) | ![Settings](docs/screenshots/desktop/settings.png) |
-| ![Welcome](docs/screenshots/desktop/welcome.png) | ![Library](docs/screenshots/desktop/library.png) |
+| ![Discover](docs/screenshots/desktop/discover.png)<br/>**Discover** — Trending manga the moment the page loads. | ![Settings](docs/screenshots/desktop/settings.png)<br/>**Settings** — Reader, sync and appearance, right in the browser. |
+| ![Welcome](docs/screenshots/desktop/welcome.png)<br/>**Welcome** — Sign in with Google, continue as guest, or restore a backup — no account required. | ![Library](docs/screenshots/desktop/library.png)<br/>**Library** — Your shelf in any browser, with nothing to install. |
 
 ## Installation
 
-There is nothing to install to start reading.
+There is nothing to install to start reading. This is the lowest-friction way to read manga of any Nyora edition — no store account, no APK, no Gatekeeper warning. Because it's open-source and runs entirely in your browser, you can audit exactly what it does before you trust it.
 
 ### Use it instantly
 
-Just open **[nyoraweb.pages.dev](https://nyoraweb.pages.dev)** in any modern browser. Sign in with Google to sync your library, history and source preferences with your other Nyora devices. No account is required if you only want to read.
+Just open **[nyoraweb.pages.dev](https://nyoraweb.pages.dev)** in any modern browser. That's the whole install. Sign in with Google to sync your library, history and source preferences with your other Nyora devices — **no account is required if you only want to read.**
 
 ### Install as a PWA
 
-To get a native-feeling install with its own window and home-screen icon:
+Want a real app icon, its own window, and offline launch? Add Nyora to your device. This is the same static files served over HTTPS — there is no separate native package and no extra update channel, so there are no scary permission prompts to approve.
 
 - **Desktop (Chrome / Edge):** open [nyoraweb.pages.dev](https://nyoraweb.pages.dev), then use the install icon in the address bar (or the browser menu → *Install Nyora*).
 - **Android (Chrome):** open the app, then menu → *Add to Home screen* / *Install app*.
 - **iOS / iPadOS (Safari):** open the app, tap the Share button, then *Add to Home Screen*.
 
 Once installed, the cached app shell lets the interface load even when you are offline.
+
+### Is this safe to use?
+
+Yes. A few reassurances, in plain terms:
+
+- **It's open-source and auditable.** Every line is on [GitHub](https://github.com/Hasan72341/nyora-web) under Apache-2.0. Nothing is hidden, obfuscated or phoning home.
+- **No ads, no trackers, no telemetry.** There is no advertising SDK and no analytics pipeline in the code.
+- **No account needed to read**, and the only data ever stored on a server is the sync rows tied to *your* Google account — and only if you choose to sign in.
+- **It runs in your browser's sandbox.** Unlike a downloaded app, a website can't touch your files or system; it just renders pages. If you ever want to stop using it, close the tab — there's nothing left behind to uninstall (and a PWA install removes cleanly like any bookmark/app).
 
 ### Requirements
 
@@ -269,16 +299,22 @@ No dates, no promises — just the honest direction.
 ## FAQ
 
 **Is Nyora Web free?**
-Yes. It is free, ad-free, with no tracking, and no account is required to read.
+Yes. It is free, ad-free, with no tracking, and no account is required to read. There is no paid tier and no upsell.
+
+**Is it safe? Why doesn't my browser warn me to install anything?**
+Because there's nothing to install — it's a website running in your browser's sandbox, not a downloaded program, so it never triggers an "unknown app" or Gatekeeper prompt. The code is fully open-source (Apache-2.0) and auditable on [GitHub](https://github.com/Hasan72341/nyora-web), with no ads, no telemetry, and no advertising SDK.
+
+**Do I need an account?**
+No. Open the app and start reading. Signing in with Google is entirely optional and exists only to sync your library and preferences across your devices.
+
+**Will my data stay private?**
+Yes. Reading runs client-side, and the only data that ever leaves your device is the sync rows tied to your own account — and only if you sign in. Sync uses Supabase with Google sign-in, storing your library and source preferences per-row against your account. Nyora does not run a separate backend collecting your reading activity, and there is no telemetry.
 
 **Are there any ads or trackers?**
 No. There is no advertising SDK and no telemetry. The app only communicates with the sources you browse, the optional Cloudflare proxy, and — if you choose to sign in — Supabase for sync and AniList for tracking.
 
 **Where does the content come from, and is that legal?**
 Nyora does not host any manga. It parses publicly available online sources entirely client-side, much like a browser does. Nyora is not affiliated with any of the sources it can access.
-
-**Is my sync data private?**
-Sync uses Supabase with Google sign-in, storing your library and source preferences per-row against your account. Nyora does not run a separate backend collecting your reading activity, and there is no telemetry. Sign-in is entirely optional and only enables cross-device sync.
 
 **Does it work offline?**
 The PWA app shell is cached for offline use, and parser bundles ship with bundled fallbacks, so the interface and discovery remain resilient without a connection. There are no offline chapter downloads in the browser — for full offline reading and CBZ export, use one of Nyora's native apps from the platform table above; your synced library comes with you.
@@ -290,11 +326,107 @@ Absolutely. The SPA is just static files you can serve from any static host, and
 Those engines live in Nyora's native apps. Install one from the [platform table](#nyora-on-every-platform), sign in with the same Google account, and your web library syncs straight over.
 
 **How do I update the web app?**
-Just reload it. As a deployed static SPA, the latest version is served on each visit; parser bundles update over-the-air independently and are SHA-256 verified before they run.
+Just reload it. As a deployed static SPA, the latest version is served on each visit; parser bundles update over-the-air independently and are SHA-256 verified before they run. There's no manual update step.
 
 ## Contributing
 
-Issues and pull requests are welcome — bug reports, new sources, reader polish, all of it. If you're planning a larger change, open an issue first so we can discuss the approach before you invest the work. The codebase is original and auditable, and the in-browser architecture means most fixes are plain client-side JavaScript. If Nyora makes your reading better, starring the [repository](https://github.com/Hasan72341/nyora-web/stargazers) is the simplest way to help the project reach more readers.
+Welcome — genuinely. Nyora Web is **fully open-source and written in plain client-side JavaScript/TypeScript**, which makes it one of the friendliest entry points in the whole project. There's no native toolchain, no private engine, and no build step required to hack on it: clone the repo, serve a folder, and you're editing the live app. Whether you write code or not, there's a way for you to make Nyora better today.
+
+If you're planning a larger change, open an [issue](https://github.com/Hasan72341/nyora-web/issues) first so we can talk through the approach before you invest the work. Be kind, assume good intent, and don't worry about being new — first PRs are very welcome here.
+
+### Ways to contribute
+
+You don't have to be a programmer to help:
+
+- **Report a bug.** A source that won't load, a reader glitch, a layout issue on your device — [open an issue](https://github.com/Hasan72341/nyora-web/issues) with steps to reproduce, your browser, and a screenshot if you can.
+- **Request or help port a source.** Tell us a site you'd love to read from, or — even better — wire it up yourself (see [Adding a source](#adding-a-source); most are a few lines of JSON).
+- **Improve or translate the UI.** Copy tweaks, accessibility fixes, and localisation all make a real difference. The interface lives in `web/screens/` and `web/styles.css`.
+- **Write docs.** Clarify a confusing step in this README, document a parser family, or add a how-to. Docs PRs are some of the most valuable.
+- **Test releases.** Try the app on your browser and devices and tell us what breaks. Real-world testing on uncommon setups is gold.
+- **Star and share.** Genuinely one of the most helpful things you can do — it's how more readers (and more contributors) find the project.
+
+### Development setup
+
+This is distinct from the end-user [Build from Source](#build-from-source) steps — it's the quickstart for *hacking on* Nyora Web.
+
+```bash
+# 1. Clone
+git clone https://github.com/Hasan72341/nyora-web.git
+cd nyora-web
+
+# 2. Serve the SPA unbundled — no build step needed for development
+cd web && python3 -m http.server 3000   # → http://127.0.0.1:3000
+```
+
+- Open **`http://127.0.0.1:3000`** (use `127.0.0.1`, not `localhost` — that's the origin registered for Google sign-in). Sign-in is optional; everything except cross-device sync works without it.
+- The app is authored as **unbundled ES modules**, so you just edit a file under `web/` and reload the tab — there is no watcher or compile step to run.
+- `build.mjs` (run via `npm run build`, requires Node + esbuild) bundles `web/` into `dist/` for production deploys on Cloudflare Pages. **You don't need it for development** — it's only for shipping.
+- To work on the proxy, the Cloudflare Worker lives in `cloudflare-worker/` and deploys with `npx wrangler deploy`.
+
+**Where to look first:** start at `web/app.js` (the entry point) and `web/screens/` (one file per screen). To touch source parsing, head to `web/core/web-parsers/`.
+
+### Project structure
+
+A quick map so you can navigate confidently:
+
+```
+web/
+  app.js                  ← SPA entry point / router
+  index.html              ← app shell
+  styles.css              ← all styling
+  manifest.webmanifest    ← PWA manifest
+  sw.js                   ← service worker (offline app shell)
+  screens/                ← one module per screen (explore, reader, library,
+                            settings, search, details, history, tracker, …)
+  core/
+    api.js                ← source / catalogue API surface
+    parser-runtime.js     ← loads + verifies OTA parser bundles, runs them
+    sync.js               ← Google Identity → Supabase per-row sync
+    library.js            ← favourites, categories, reading state
+    store.js · db.js      ← local persistence
+    ui.js · motion.js     ← shared UI + animation helpers
+    web-parsers/          ← the parser families + the source registry
+      base.js             ← base classes, shared types, cross-platform id hash
+      index.js            ← registers every parser family
+      sources.json        ← the source catalogue (one entry per site)
+      madara.js · mangareader.js · … ← one file per family
+cloudflare-worker/
+  worker.js               ← CORS + image proxy (the only server-side piece)
+```
+
+### Good first contributions
+
+Concrete places to start, drawn from how the repo is actually organised:
+
+- **Add a source from an existing family.** Many sites are powered by a handful of shared engines (Madara, MangaReader, ZeistManga, FoolSlide, MMRCMS, WpComics, Keyoapp and more — see the files in `web/core/web-parsers/`). If a site runs on one of these, adding it is often just a new entry in `web/core/web-parsers/sources.json` — see [Adding a source](#adding-a-source) below.
+- **Small UI / reader fixes.** Tighten a layout, fix a hover state, improve keyboard or screen-reader behaviour. These live in `web/screens/` and `web/styles.css` and are very approachable.
+- **Docs.** Improve a confusing section of this README, or document a parser family's quirks for the next contributor.
+- **Reproduce and triage bugs.** Pick an open issue, confirm whether you can reproduce it, and add details — even without a fix, that's a real contribution.
+
+Browse the [Issues page](https://github.com/Hasan72341/nyora-web/issues) for things that need a hand.
+
+### Adding a source
+
+Because parsing is family-based, most new sources are **data, not code**. The flow:
+
+1. **Identify the family.** Open `web/core/web-parsers/` and find the engine the target site runs on (e.g. `madara.js`, `mangareader.js`, `zeistmanga.js`). `index.js` lists every registered family.
+2. **Add a registry entry.** Add an object to `web/core/web-parsers/sources.json` describing the site — its `id`, `className`, `title`, `locale`, `domain`, the `family` parser it maps to, an `isNsfw` flag, and any per-site `overrides`. Existing entries are the template; copy the closest one and adjust.
+3. **Test it locally.** Serve the app (see [Development setup](#development-setup)), open the source, and verify browse, search, details, chapters and pages all load. If a site needs the proxy for CORS/images, that's expected — see the [Architecture](#architecture) notes.
+4. **If the site uses an engine that doesn't exist yet**, that's a larger contribution: a new family file alongside the others, subclassing the base in `base.js`. Open an issue first so we can compare notes.
+
+One important rule: the cross-platform manga/chapter id hash in `base.js` (`nyoraId`) must stay byte-identical across platforms so sync keeps working — don't change it, and let the bundle own id generation.
+
+### Pull request & issue etiquette
+
+A few things that keep reviews fast and friendly:
+
+- **Keep PRs focused.** One change per PR is much easier to review and merge than a grab-bag.
+- **Describe the change.** Say what it does and why, link any related issue, and include a screenshot or before/after for anything visual.
+- **Match the surrounding style.** The codebase is plain, readable ES modules — follow the patterns already in the file you're editing.
+- **Be kind.** Reviews are a conversation, not a gate. Questions are always welcome, and "I'm new to this" is a perfectly good opening line.
+- File bugs and ideas on the [Issues page](https://github.com/Hasan72341/nyora-web/issues); open a [pull request](https://github.com/Hasan72341/nyora-web/pulls) when you're ready.
+
+If Nyora makes your reading better, the simplest way to help is to **star the [repository](https://github.com/Hasan72341/nyora-web/stargazers) and share it** — it's how the project reaches more readers and more contributors. Thank you for being here.
 
 ## Acknowledgements
 
@@ -304,6 +436,6 @@ Nyora's sources are source-compatible with Tachiyomi/Kotatsu-style definitions, 
 
 Licensed under the **Apache License 2.0** (see [`LICENSE`](LICENSE)). Original code, built from scratch — source-compatible with Tachiyomi/Kotatsu-style sources but not a fork.
 
-Developed and maintained by **Md Hasan Raza** — [GitHub](https://github.com/Hasan72341) · [Instagram](https://instagram.com/md_hasan_raza____) · [LinkedIn](https://www.linkedin.com/in/md-hasan-raza) · hasanraza96@outlook.com
+Developed and maintained by **Md Hasan Raza** — [GitHub](https://github.com/Hasan72341) · [X](https://x.com/hasanraza___) · [Instagram](https://instagram.com/md_hasan_raza____) · [LinkedIn](https://www.linkedin.com/in/md-hasan-raza) · hasanraza96@outlook.com
 
 > Nyora is not affiliated with any of the manga sources it can access.
