@@ -175,6 +175,9 @@ export class MangaBoxParser extends BaseParser {
                         const more = pg.has_more === true || (total > 0 ? collected.length < total : batch.length >= limit);
                         if (!more) break;
                     }
+                    // API returns newest-first; reverse to oldest-first BEFORE numbering
+                    // so the index-based fallback matches the emitted order.
+                    collected.reverse();
                     chapters = collected.map((c, i) => {
                         const chSlug = c.chapter_slug || c.slug || "";
                         let chUrl;
@@ -184,16 +187,15 @@ export class MangaBoxParser extends BaseParser {
                             chUrl = `https://${this.domain}/manga/${slug}/${chSlug}`;
                         }
                         const rel = this.toRelativeUrl(chUrl);
+                        const rawNum = c.chapter_num != null ? c.chapter_num : c.number;
                         return new MangaChapter({
                             id: rel,
                             url: rel,
                             title: c.chapter_name || c.name || `Chapter ${c.chapter_num != null ? c.chapter_num : i + 1}`,
-                            number: Number(c.chapter_num != null ? c.chapter_num : c.number) || (i + 1),
+                            number: (rawNum != null && rawNum !== "" && !Number.isNaN(Number(rawNum))) ? Number(rawNum) : (i + 1),
                             source: this.source
                         });
                     }).filter(c => c.url);
-                    // API returns newest-first; the UI convention is oldest-first.
-                    chapters.reverse();
                 } catch { chapters = []; }
             }
         }
@@ -239,11 +241,17 @@ export class MangaBoxParser extends BaseParser {
                 return new MangaChapter({
                     id: relHref,
                     url: relHref,
-                    title: a?.textContent?.trim() || `Chapter ${i + 1}`,
-                    number: i + 1,
+                    title: a?.textContent?.trim() || "",
+                    number: 0,
                     source: this.source
                 });
-            }).filter(c => c && c.url && !c.url.includes("javascript:void")).reverse();
+            }).filter(c => c && c.url && !c.url.includes("javascript:void"))
+              .reverse()
+              .map((c, i) => {
+                c.number = i + 1;
+                if (!c.title) c.title = `Chapter ${i + 1}`;
+                return c;
+              });
         }
 
         // Genres: .gg shows them in a .genre-list; classic skins use the info table.

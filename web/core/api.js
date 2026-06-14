@@ -40,7 +40,7 @@ async function parserGet(path) {
   try {
     return await parserRuntime.handle(path, 'GET');
   } catch (e) {
-    if (String(e && e.message || '').includes('not implemented')) return null;
+    if (String(e && e.message || '').toLowerCase().includes('not implemented')) return null;
     throw e;
   }
 }
@@ -50,7 +50,7 @@ async function parserPost(path, body) {
   try {
     return await parserRuntime.handle(path, 'POST', body);
   } catch (e) {
-    if (String(e && e.message || '').includes('not implemented')) return null;
+    if (String(e && e.message || '').toLowerCase().includes('not implemented')) return null;
     throw e;
   }
 }
@@ -60,7 +60,7 @@ async function parserDelete(path) {
   try {
     return await parserRuntime.handle(path, 'DELETE');
   } catch (e) {
-    if (String(e && e.message || '').includes('not implemented')) return null;
+    if (String(e && e.message || '').toLowerCase().includes('not implemented')) return null;
     throw e;
   }
 }

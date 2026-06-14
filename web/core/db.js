@@ -129,9 +129,16 @@ const ISO = (ms) => {
   return Number.isFinite(n) && n > 0 ? new Date(n).toISOString() : new Date(0).toISOString();
 };
 
-function mangaRow(m) {
+function mangaRow(m, forcedId) {
   if (!m) return null;
-  const id = m.id != null && m.id !== '' ? String(m.id) : (m.url || '');
+  // Use the caller's canonical library key when given, so the manga row's id
+  // always matches the manga_id foreign key the child rows carry. For id-keyed
+  // manga this equals String(m.id) either way; for url-keyed manga the library
+  // key is `sourceId|url` (keyOf in library.js) — falling back to bare m.url
+  // here would orphan every child row.
+  const id = forcedId != null && forcedId !== ''
+    ? String(forcedId)
+    : (m.id != null && m.id !== '' ? String(m.id) : (m.url || ''));
   if (!id) return null;
   return {
     id,
@@ -177,20 +184,20 @@ async function doMirror(data) {
     for (const n of stores) os(n).clear();
 
     const mangaSeen = new Set();
-    const putManga = (m) => {
-      const row = mangaRow(m);
+    const putManga = (m, id) => {
+      const row = mangaRow(m, id);
       if (row && !mangaSeen.has(row.id)) { mangaSeen.add(row.id); os(STORES.manga).put(row); }
       return row ? row.id : '';
     };
 
     // favourites
     for (const [mid, rec] of Object.entries(data.favourites || {})) {
-      putManga(rec.manga);
+      putManga(rec.manga, mid);
       os(STORES.favourite).put({ manga_id: String(mid), added_at: ISO(rec.addedAt), sort_key: 0, updated_at: ISO(rec.addedAt), deleted_at: null });
     }
     // history
     for (const [mid, h] of Object.entries(data.history || {})) {
-      putManga(h.manga);
+      putManga(h.manga, mid);
       os(STORES.history).put({
         manga_id: String(mid), source_id: h.sourceId || '', chapter_id: String(h.chapterId || ''),
         chapter_title: h.chapterTitle || '', page: Number(h.page) || 0, scroll: 0,
@@ -200,7 +207,7 @@ async function doMirror(data) {
     }
     // bookmarks
     for (const b of (data.bookmarks || [])) {
-      putManga(b.manga);
+      putManga(b.manga, b.mangaId);
       const id = `${b.mangaId}:${b.chapterId}:${b.page}`;
       os(STORES.bookmark).put({
         id, manga_id: String(b.mangaId), chapter_id: String(b.chapterId || ''),

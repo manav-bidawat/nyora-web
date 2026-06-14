@@ -34,6 +34,9 @@ export const meta = {
 // In-screen UI state (search query). Kept module-local so a re-render of the
 // body (after remove/clear) preserves what the user typed.
 let _query = '';
+// The single active 'nyora:library-restored' listener; replaced each render
+// so navigating to History repeatedly cannot leak listeners/closures.
+let _onRestored = null;
 
 export function render(view, _params) {
   view.replaceChildren();
@@ -77,10 +80,11 @@ export function render(view, _params) {
   requestAnimationFrame(renderList);
 
   // Repaint when a cloud restore completes (fired by settings.js after restoreFromCloud).
-  const onRestored = () => renderList();
-  window.addEventListener('nyora:library-restored', onRestored, { once: false });
-  // Clean up the listener when the view is removed from the DOM.
-  body.addEventListener('disconnected', () => window.removeEventListener('nyora:library-restored', onRestored), { once: true });
+  // Drop any listener from a previous History mount so visits don't leak
+  // listeners/stale closures (the shared #view is reused, never detached).
+  if (_onRestored) window.removeEventListener('nyora:library-restored', _onRestored);
+  _onRestored = () => renderList();
+  window.addEventListener('nyora:library-restored', _onRestored, { once: false });
 }
 
 // Pull from the synchronous store and (re)paint sections honouring the filter.

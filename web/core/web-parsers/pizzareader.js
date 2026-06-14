@@ -127,8 +127,8 @@ export class PizzaReaderParser extends BaseParser {
 
     async getListPage(page, order, filter) {
         filter = filter || {};
-        // The whole catalog comes back in one request; only the first page has data.
-        if (page && page > 1 && !filter.query) return [];
+        // The whole catalog AND search both come back in one request; only page 1 has data.
+        if (page && page > 1) return [];
 
         let comics = [];
         if (filter.query) {

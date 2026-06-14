@@ -84,9 +84,11 @@ export function render(view, params) {
           count.replaceChildren(document.createTextNode('Failed'));
           const box = errorBox(error);
           box.appendChild(btn('Retry', { variant: 'ghost', class: 'btn-sm', onClick: () => retryOne(src) }));
+          section.dataset.failed = '1';
           section.replaceChildren(head, box);
           return;
         }
+        delete section.dataset.failed;
         const list = Array.isArray(entries) ? entries.slice(0, PER_SOURCE_LIMIT) : [];
         if (!list.length) {
           section.remove();
@@ -132,7 +134,7 @@ export function render(view, params) {
       status.replaceChildren(spinner(), el('span', null, `Searching ${runState.total} sources...`));
       return;
     }
-    const hits = runState.sections.filter((s) => s.node.parentNode).length;
+    const hits = runState.sections.filter((s) => s.node.parentNode && !s.node.dataset.failed).length;
     status.replaceChildren(
       el('span', { class: 'chip' }, hits > 0 ? `Found matches in ${hits} sources` : `No matches found for "${query}"`)
     );

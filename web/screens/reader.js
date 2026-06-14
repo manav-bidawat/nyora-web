@@ -388,7 +388,7 @@ export function render(view, params) {
 
   function setPrefetch(on) {
     prefetch = !!on;
-    store.set({ reader: { prefetch: checked } });
+    store.set({ reader: { prefetch } });
     savePrefs();
     if (prefetch) maybePrefetch();
   }
@@ -514,7 +514,7 @@ export function render(view, params) {
 
   function syncPosition() {
     const total = st.pages.length || 0;
-    $$('.reader-bar .counter', view).forEach((n) => {
+    $$('.reader-bar .reader-counter', view).forEach((n) => {
       n.textContent = `${st.currentPage + 1} / ${total}`;
     });
     $$('.reader-slider', view).forEach((n) => {

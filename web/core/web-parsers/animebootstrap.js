@@ -220,7 +220,7 @@ export class AnimeBootstrapParser extends BaseParser {
             };
         }).filter((t) => t.key || t.title);
 
-        const chapters = this.getChapters(doc);
+        const chapters = await this.getChapters(doc);
 
         return new Manga({
             ...manga,

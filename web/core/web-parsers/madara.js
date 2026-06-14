@@ -74,7 +74,7 @@ export class MadaraParser extends BaseParser {
     async getAsuraListPage(page, order, filter) {
         let url = `https://${this.domain}/browse?page=${page}`;
         if (filter.query) url += `&search=${encodeURIComponent(filter.query)}`;
-        const html = await this.context.httpGet(url, { "User-Agent": DESKTOP_UA }, this);
+        const html = await this.context.httpGet(url, this);
         const doc = this.context.parseHTML(html);
         const seen = new Set();
         const entries = [];
@@ -112,7 +112,7 @@ export class MadaraParser extends BaseParser {
 
     async getAsuraDetails(manga) {
         const publicUrl = this.toAbsoluteUrl(manga.url).replace("/series/", "/comics/");
-        let html = await this.context.httpGet(publicUrl, { "User-Agent": DESKTOP_UA }, this);
+        let html = await this.context.httpGet(publicUrl, this);
         let doc = this.context.parseHTML(html);
         
         const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute("href") || publicUrl;
@@ -139,7 +139,7 @@ export class MadaraParser extends BaseParser {
         if (chapters.length === 0 || !description) {
             try {
                 const apiBase = this.asuraApiBase();
-                const text = await this.context.httpGet(`${apiBase}/api/series/${key}?nyoraTry=${Date.now()}`, { "User-Agent": DESKTOP_UA }, this);
+                const text = await this.context.httpGet(`${apiBase}/api/series/${key}?nyoraTry=${Date.now()}`, this);
                 const res = JSON.parse(text);
                 const series = res.series || res.data?.series || res.data || {};
                 
@@ -147,7 +147,7 @@ export class MadaraParser extends BaseParser {
                 description = series.description || description;
                 
                 if (chapters.length === 0) {
-                    const cText = await this.context.httpGet(`${apiBase}/api/series/${key}/chapters?nyoraTry=${Date.now()}`, { "User-Agent": DESKTOP_UA }, this);
+                    const cText = await this.context.httpGet(`${apiBase}/api/series/${key}/chapters?nyoraTry=${Date.now()}`, this);
                     const cRes = JSON.parse(cText);
                     const rows = Array.isArray(cRes.data) ? cRes.data : [];
                     chapters = rows.map(row => new MangaChapter({
@@ -175,7 +175,7 @@ export class MadaraParser extends BaseParser {
 
     async getAsuraPages(chapter) {
         const url = this.toAbsoluteUrl(chapter.url);
-        const html = await this.context.httpGet(url, { "User-Agent": DESKTOP_UA }, this);
+        const html = await this.context.httpGet(url, this);
         const doc = this.context.parseHTML(html);
 
         let imageUrls = Array.from(doc.querySelectorAll("img[data-page-index], .reading-content img, .page-break img"))
@@ -199,7 +199,7 @@ export class MadaraParser extends BaseParser {
         const number = (this.toRelativeUrl(chapter.url).match(/\/chapter\/([^/?#]+)/) || [])[1];
         if (key && number) {
             try {
-                const data = JSON.parse(await this.context.httpGet(`${this.asuraApiBase()}/api/series/${key}/chapters/${number}`, { "User-Agent": DESKTOP_UA }, this));
+                const data = JSON.parse(await this.context.httpGet(`${this.asuraApiBase()}/api/series/${key}/chapters/${number}`, this));
                 const pages = data?.data?.chapter?.pages || [];
                 return pages.map((page, i) => new MangaPage({
                     id: page.url || String(i),

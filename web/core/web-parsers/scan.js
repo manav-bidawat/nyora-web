@@ -120,6 +120,10 @@ export class ScanParser extends BaseParser {
     async getListPage(page, order, filter) {
         filter = filter || {};
         const query = filter.query;
+        // /search returns the entire result set at once (no pagination param);
+        // requesting page>1 would re-fetch the identical fragment and duplicate
+        // results forever, so terminate after the first page for searches.
+        if (query && page > 1) return [];
         let isSearch = false;
         let url;
 
@@ -217,7 +221,7 @@ export class ScanParser extends BaseParser {
             if (!href) continue;
             const relHref = this.toRelativeUrl(href);
             const h5 = div.querySelector("h5");
-            const dateEl = div.querySelector("h5 div") || doc.querySelector("h5 div");
+            const dateEl = div.querySelector("h5 div");
             chapters.push(new MangaChapter({
                 id: relHref,
                 url: relHref,

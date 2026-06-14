@@ -221,15 +221,15 @@ async function pullAll(session, since) {
 
 function toRemoteRows(data, uid, nowIso) {
   const manga = new Map();
-  const addManga = (m, sourceId, updatedAt) => {
-    const row = mangaRow(m, uid, updatedAt || nowIso, sourceId);
+  const addManga = (m, sourceId, updatedAt, forcedId) => {
+    const row = mangaRow(m, uid, updatedAt || nowIso, sourceId, forcedId);
     if (row && !manga.has(row.id)) manga.set(row.id, row);
     return row && row.id;
   };
 
   const favourites = [];
   for (const [mangaId, rec] of Object.entries(data.favourites || {})) {
-    addManga(rec.manga, sourceIdFromManga(rec.manga), iso(rec.addedAt));
+    addManga(rec.manga, sourceIdFromManga(rec.manga), iso(rec.addedAt), mangaId);
     favourites.push({
       user_id: uid,
       manga_id: String(mangaId),
@@ -241,7 +241,7 @@ function toRemoteRows(data, uid, nowIso) {
 
   const history = [];
   for (const [mangaId, h] of Object.entries(data.history || {})) {
-    addManga(h.manga, h.sourceId, iso(h.updatedAt));
+    addManga(h.manga, h.sourceId, iso(h.updatedAt), mangaId);
     history.push({
       user_id: uid,
       manga_id: String(mangaId),
@@ -259,7 +259,7 @@ function toRemoteRows(data, uid, nowIso) {
 
   const bookmarks = [];
   for (const b of data.bookmarks || []) {
-    addManga(b.manga, b.sourceId, iso(b.createdAt));
+    addManga(b.manga, b.sourceId, iso(b.createdAt), b.mangaId);
     bookmarks.push({
       user_id: uid,
       id: `${b.mangaId}:${b.chapterId}:${b.page}`,
@@ -452,9 +452,15 @@ function fromRemoteRows(rows, baseData) {
   return data;
 }
 
-function mangaRow(m, uid, updatedAt, sourceId) {
+function mangaRow(m, uid, updatedAt, sourceId, forcedId) {
   if (!m) return null;
-  const id = m.id != null && m.id !== '' ? String(m.id) : (m.url || '');
+  // Prefer the caller's canonical library key so this manga row's id matches the
+  // manga_id foreign key on the favourite/history/bookmark rows. For url-keyed
+  // manga the library key is `sourceId|url`; falling back to bare m.url here
+  // would make those rows reference a manga id that doesn't exist on pull.
+  const id = forcedId != null && forcedId !== ''
+    ? String(forcedId)
+    : (m.id != null && m.id !== '' ? String(m.id) : (m.url || ''));
   if (!id) return null;
   return {
     user_id: uid,
@@ -598,6 +604,10 @@ function loadGoogleIdentityServices() {
     script.onerror = () => reject(new Error('Google Identity Services failed to load.'));
     document.head.appendChild(script);
   });
+  // Don't cache a rejected promise — otherwise one failed script load would
+  // permanently break Google sign-in for the rest of the session. Reset so the
+  // next attempt can retry.
+  _gisPromise.catch(() => { _gisPromise = null; });
   return _gisPromise;
 }
 
